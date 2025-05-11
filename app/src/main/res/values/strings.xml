@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">WeatherApp</string>
+    <string name="action_try_again">Try again</string>
+    <string name="humidity_char">H:%1$s</string>
+    <string name="wind_speed_kmph">wind speed:%1$sKmph</string>
+    <string name="pressure">pressure:%1$s</string>
+    <string name="sunrise">sunrise:%1$s</string>
+    <string name="sunset">sunset:%1$s</string>
+    <string name="maxtempc">maxTempC:%1$s°</string>
+    <string name="mintempc">minTempC:%1$s°</string>
+    <string name="temperature_c">Temperature: %1$s°C</string>
+    <string name="weather">Weather: %1$s</string>
+    <string name="humidity">Humidity: %1$s</string>
+    <string name="message_no_city">There is no city, try add one</string>
+    <string name="title">Weather App by Babel</string>
+    <string name="add_hint">City, Country</string>
+    <string name="search_hint">Search</string>
+</resources>
