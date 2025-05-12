@@ -1,6 +1,7 @@
 package com.android.weatherapp.presentation.ui.main
 
 import android.Manifest
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -74,7 +75,7 @@ fun MainScreen(navController: NavHostController, viewModel: MainViewModel = koin
 
     Column(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxSize().background(color = Color.White)
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -236,7 +237,7 @@ fun MainScreen(navController: NavHostController, viewModel: MainViewModel = koin
 
 @Composable
 fun CityList(
-    cities: List<Pair<String, CityWeatherModel>>,
+    cities: List<CityWeatherModel>,
     onRemoveCity: (String) -> Unit,
     navController: NavHostController
 ) {
@@ -246,11 +247,11 @@ fun CityList(
     ) {
         items(cities) { cityData ->
             CityCard(
-                cityName = cityData.second.data.request[0].query,
-                weatherModel = cityData.second,
-                onRemove = { onRemoveCity(cityData.first) },
+                cityName = cityData.data.request[0].query,
+                weatherModel = cityData,
+                onRemove = { onRemoveCity(cityData.data.request[0].query) },
                 onClick = {
-                    navController.navigate(NavRoutes.DETAILS.route + "/${cityData.second.data.request[0].query}")
+                    navController.navigate(NavRoutes.DETAILS.route + "/${cityData.data.request[0].query}")
                 }
             )
         }

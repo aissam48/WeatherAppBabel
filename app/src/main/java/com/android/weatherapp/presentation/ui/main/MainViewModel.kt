@@ -29,7 +29,7 @@ import java.util.Locale
 sealed class WeatherUiState {
     data object Idle : WeatherUiState()
     data object Loading : WeatherUiState()
-    data class Success(val data: List<Pair<String, CityWeatherModel>>) : WeatherUiState()
+    data class Success(val data: List<CityWeatherModel>) : WeatherUiState()
     data class Error(val error: ErrorModel) : WeatherUiState()
 }
 
@@ -42,7 +42,7 @@ class MainViewModel(private val apiManager: ApiManager) : ViewModel() {
         "Tangier, Morocco",
         "Fes, Morocco"
     )
-    private val cities = mutableListOf<Pair<String, CityWeatherModel>>()
+    private val cities = mutableListOf<CityWeatherModel>()
 
     private val _uiState = MutableStateFlow<WeatherUiState>(WeatherUiState.Idle)
     val uiState: StateFlow<WeatherUiState> = _uiState
@@ -70,7 +70,7 @@ class MainViewModel(private val apiManager: ApiManager) : ViewModel() {
 
             defaultCities.forEach { city ->
                 apiManager.getCityWeather(city, 1, { success ->
-                    cities.add(Pair(city, success))
+                    cities.add(success)
                     _uiState.value = WeatherUiState.Success(data = cities.toList())
                 }, { error ->
                     _uiState.value = WeatherUiState.Error(error)
@@ -82,7 +82,14 @@ class MainViewModel(private val apiManager: ApiManager) : ViewModel() {
     fun addCity(city: String) {
         viewModelScope.launch {
             apiManager.getCityWeather(city, 1, { success ->
-                cities.add(0,Pair(city, success))
+                if (cities.isEmpty()){
+                    cities.add(0,success)
+                }else{
+                    val checkCityIfExist = cities.find { it.data.request[0].query == success.data.request[0].query }
+                    if (checkCityIfExist == null){
+                        cities.add(0,success)
+                    }
+                }
                 _uiState.value = WeatherUiState.Success(data = cities.toList())
             }, { error ->
                 _uiState.value = WeatherUiState.Error(error)
@@ -93,14 +100,14 @@ class MainViewModel(private val apiManager: ApiManager) : ViewModel() {
 
     fun search(city: String) {
         _searchByName.value = city
-        val result = mutableListOf<Pair<String, CityWeatherModel>>()
-        result.addAll(cities.filter { it.first.lowercase().contains(city.lowercase()) })
+        val result = mutableListOf<CityWeatherModel>()
+        result.addAll(cities.filter { it.data.request[0].query.lowercase().contains(city.lowercase()) })
         _uiState.value = WeatherUiState.Success(result)
     }
 
     fun removeCity(city: String) {
         viewModelScope.launch {
-            cities.removeIf { it.first == city }
+            cities.removeIf { it.data.request[0].query == city }
             _uiState.value = WeatherUiState.Success(data = cities.toList())
         }
     }
@@ -109,10 +116,10 @@ class MainViewModel(private val apiManager: ApiManager) : ViewModel() {
         viewModelScope.launch {
             _uiState.value = WeatherUiState.Loading
 
-            val result = mutableListOf<Pair<String, CityWeatherModel>>()
+            val result = mutableListOf<CityWeatherModel>()
             cities.forEach { model ->
-                apiManager.getCityWeather(model.first, 1, { success ->
-                    result.add(Pair(model.first, success))
+                apiManager.getCityWeather(model.data.request[0].query, 1, { success ->
+                    result.add(success)
                 }, { error ->
                     _uiState.value = WeatherUiState.Error(error)
                 })

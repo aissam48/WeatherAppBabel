@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -40,6 +41,9 @@ fun CityCard(
             .clickable {
                 onClick()
             },
+        colors = CardDefaults.cardColors(
+            containerColor = Color.Gray
+        )
     ) {
         Column(
             modifier = Modifier
@@ -54,7 +58,8 @@ fun CityCard(
                 Text(
                     text = cityName,
                     fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
                 )
 
                 IconButton(
@@ -75,25 +80,33 @@ fun CityCard(
                 text = stringResource(
                     R.string.temperature_c,
                     weatherModel.data.current_condition[0].temp_C
-                )
+                ),
+                fontWeight = FontWeight.Medium,
+                color = Color.White
             )
             Text(
                 text = stringResource(
                     R.string.weather,
                     weatherModel.data.current_condition[0].weatherDesc[0].value
-                )
+                ),
+                fontWeight = FontWeight.Medium,
+                color = Color.White
             )
             Text(
                 text = stringResource(
                     R.string.humidity,
                     weatherModel.data.current_condition[0].humidity
-                )
+                ),
+                fontWeight = FontWeight.Medium,
+                color = Color.White
             )
             Text(
                 text = stringResource(
                     R.string.wind_speed_kmph,
                     weatherModel.data.current_condition[0].windspeedKmph
-                )
+                ),
+                fontWeight = FontWeight.Medium,
+                color = Color.White
             )
         }
     }

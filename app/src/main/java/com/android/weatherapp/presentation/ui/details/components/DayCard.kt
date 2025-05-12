@@ -29,7 +29,7 @@ fun DayCard(weather: Weather, selectedDay: Weather?, clicked: (weather: Weather)
                 clicked(weather)
             },
         colors = CardDefaults.cardColors(
-            containerColor = if (selectedDay == weather) Color.Gray else Color.LightGray
+            containerColor = if (selectedDay == weather) Color.DarkGray else Color.Gray
         )
     ) {
         Row(modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
