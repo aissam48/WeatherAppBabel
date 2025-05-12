@@ -149,8 +149,12 @@ fun MainScreen(navController: NavHostController, viewModel: MainViewModel = koin
                         viewModel.fetchCurrentLocation(context) { location ->
                             if (location == null)
                                 return@fetchCurrentLocation
+                            // get city and country using latitude and longitude
                             val geoLocation = viewModel.getCityAndCountry(location, context)
                             navController.navigate(NavRoutes.DETAILS.route + "/$geoLocation")
+
+                            // using latitude and longitude
+                            //navController.navigate(NavRoutes.DETAILS.route + "/${location.latitude},${location.longitude}")
                         }
                     } else {
                         permissionState.launchPermissionRequest()
